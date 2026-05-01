@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+data_log.json
+.vscode/
+.idea/
+.env
