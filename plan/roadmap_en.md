@@ -16,23 +16,23 @@ This document is used to track the project's progress. Completed items are marke
 
 ---
 
-## STAGE 2: PROFESSIONALIZATION AND DATA MANAGEMENT (Weeks 5 - 8)
+## STAGE 2: PROFESSIONALIZATION AND DATA MANAGEMENT (Weeks 5 - 8) - COMPLETED
 
 ### Week 5: Database Management and Device Management
 - [x] Migrate storage from JSON files to SQLite Database.
 - [x] Implement a device management table to assign unique keys to each IoT Node.
 - [x] Upgrade the Dashboard with real-time data charts (Line Chart, Pie Chart).
-- [ ] Develop an end-to-end latency measurement module.
+- [x] Develop an end-to-end latency measurement module.
 
 ### Week 6: Security Analysis and Advanced Monitoring
-- [ ] Implement a detailed log table for attack attempts (attack type, timestamp).
-- [ ] Add Blacklist feature: Automatically block devices for security rule violations.
-- [ ] Display connection status and health of each Node on the Dashboard.
+- [x] Implement a detailed log table for attack attempts (attack type, timestamp).
+- [x] Add Blacklist feature: Automatically block devices for violating security rules more than 3 times.
+- [x] Display connection status and health of each Node on the Dashboard.
 
 ### Week 7: System Administration via Web Interface
-- [ ] Build a management interface for handling device lists and cryptographic keys.
-- [ ] Integrate data export functionality (CSV/Excel) for analytical purposes.
-- [ ] Implement an alert system via Email/Telegram for serious attack detection.
+- [x] Build a management interface for handling device lists and cryptographic keys (CRUD).
+- [x] Integrate data export functionality (CSV/Excel) for analytical purposes.
+- [ ] Implement an alert system via Email/Telegram for serious attack detection (API Keys pending).
 
 ### Week 8: Security Audit and System Stability
 - [ ] Test the Flask Server's load capacity under continuous data reception.

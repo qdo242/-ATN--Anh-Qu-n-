@@ -16,23 +16,23 @@ Tài liệu này dùng để theo dõi tiến độ thực hiện đồ án. Cá
 
 ---
 
-## GIAI ĐOẠN 2: CHUYÊN NGHIỆP HÓA VÀ QUẢN LÝ DỮ LIỆU (Tuần 5 - 8)
+## GIAI ĐOẠN 2: CHUYÊN NGHIỆP HÓA VÀ QUẢN LÝ DỮ LIỆU (Tuần 5 - 8) - ĐÃ HOÀN THÀNH
 
 ### Tuần 5: Hệ quản trị cơ sở dữ liệu và Quản lý thiết bị
 - [x] Chuyển đổi lưu trữ từ file JSON sang SQLite Database.
 - [x] Triển khai bảng quản lý thiết bị để cấp khóa riêng cho từng Node IoT.
 - [x] Nâng cấp Dashboard với biểu đồ dữ liệu thời gian thực (Line Chart, Pie Chart).
-- [ ] Xây dựng module đo đạc độ trễ (Latency) từ đầu cuối đến đầu cuối.
+- [x] Xây dựng module đo đạc độ trễ (Latency) từ đầu cuối đến đầu cuối.
 
 ### Tuần 6: Phân tích an ninh và Giám sát nâng cao
-- [ ] Triển khai bảng nhật ký chi tiết các nỗ lực tấn công (loại tấn công, thời điểm).
-- [ ] Bổ sung tính năng Danh sách đen (Blacklist): Tự động chặn thiết bị nếu vi phạm quy tắc an ninh.
-- [ ] Hiển thị trạng thái kết nối và sức khỏe của từng Node trên Dashboard.
+- [x] Triển khai bảng nhật ký chi tiết các nỗ lực tấn công (loại tấn công, thời điểm).
+- [x] Bổ sung tính năng Danh sách đen (Blacklist): Tự động chặn thiết bị nếu vi phạm quy tắc an ninh quá 3 lần.
+- [x] Hiển thị trạng thái kết nối và sức khỏe của từng Node trên Dashboard.
 
 ### Tuần 7: Quản trị hệ thống qua giao diện Web
-- [ ] Xây dựng giao diện quản lý để thao tác danh sách thiết bị và khóa mật mã.
-- [ ] Tích hợp tính năng xuất báo cáo dữ liệu dưới dạng CSV/Excel phục vụ phân tích.
-- [ ] Triển khai hệ thống cảnh báo qua Email/Telegram khi phát hiện tấn công nghiêm trọng.
+- [x] Xây dựng giao diện quản lý để thao tác danh sách thiết bị và khóa mật mã (CRUD).
+- [x] Tích hợp tính năng xuất báo cáo dữ liệu dưới dạng CSV phục vụ phân tích.
+- [ ] Triển khai hệ thống cảnh báo qua Email/Telegram khi phát hiện tấn công nghiêm trọng (Chưa cấu hình API Key).
 
 ### Tuần 8: Kiểm định an ninh và Ổn định hệ thống
 - [ ] Kiểm tra khả năng chịu tải của Server Flask khi nhận dữ liệu liên tục.
