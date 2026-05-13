@@ -4,12 +4,21 @@ import os
 DB_NAME = 'iot_security.db'
 
 def init_db():
+    # Xoa file DB cu de dam bao cau truc moi nhat (Cach triet de nhat cho dev)
+    if os.path.exists(DB_NAME):
+        try:
+            os.remove(DB_NAME)
+            print(f"Da xoa file {DB_NAME} cu de cap nhat cau truc moi.")
+        except Exception as e:
+            print(f"Khong the xoa file DB: {e}. Hay dam bao ban da tat tat ca terminal dang chay app.py")
+            return
+
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     
-    # 1. Bang quan ly thiet bi (Them cot status de quan ly Blacklist)
+    # 1. Bang quan ly thiet bi
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS devices (
+    CREATE TABLE devices (
         device_id TEXT PRIMARY KEY,
         node_key TEXT NOT NULL,
         gateway_key TEXT NOT NULL,
@@ -19,9 +28,9 @@ def init_db():
     )
     ''')
     
-    # 2. Bang luu tru telemetry (Them cot latency)
+    # 2. Bang luu tru telemetry
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS telemetry (
+    CREATE TABLE telemetry (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         device_id TEXT,
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -34,9 +43,9 @@ def init_db():
     )
     ''')
     
-    # 3. Bang nhat ky tan cong chi tiet
+    # 3. Bang nhat ky tan cong
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS attack_logs (
+    CREATE TABLE attack_logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         device_id TEXT,
         ip_address TEXT,
@@ -46,13 +55,13 @@ def init_db():
     )
     ''')
     
-    # Them thiet bi mau neu chua co
-    cursor.execute("INSERT OR IGNORE INTO devices (device_id, node_key, gateway_key, description) VALUES (?, ?, ?, ?)", 
+    # Them thiet bi mau
+    cursor.execute("INSERT INTO devices (device_id, node_key, gateway_key, description) VALUES (?, ?, ?, ?)", 
                    ('ESP32_NODE_X', '1234567890123456', 'gateway_secret_k', 'Thiet bi tai phong Lab'))
     
     conn.commit()
     conn.close()
-    print(f"Cap nhat Database {DB_NAME} thanh cong.")
+    print(f"Khoi tao Database {DB_NAME} phien ban moi thanh cong.")
 
 if __name__ == "__main__":
     init_db()

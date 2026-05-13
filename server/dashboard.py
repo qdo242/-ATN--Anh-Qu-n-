@@ -51,23 +51,23 @@ with tabs[0]:
 
             if not df_safe.empty:
                 fig = px.line(df_safe, x='timestamp', y=['temperature', 'humidity'], title="Dien bien du lieu cam bien (50 ban tin gan nhat)")
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch', key="sensor_line_chart")
                 
                 fig_lat = px.area(df_safe, x='timestamp', y='latency', title="Phan tich do tre xu ly (Latency)")
-                st.plotly_chart(fig_lat, use_container_width=True)
+                st.plotly_chart(fig_lat, width='stretch', key="latency_area_chart")
         
-        time.sleep(5) # Cap nhat moi 5 giay trong tab nay
+        time.sleep(2)
         if st.session_state.get('stop_refresh'): break
 
 # --- TAB 2: NHAT KY AN NINH ---
 with tabs[1]:
     st.header("Danh sach cac no luc truy cap bat thuong")
     df_attacks = load_attack_logs()
-    st.dataframe(df_attacks, use_container_width=True)
+    st.dataframe(df_attacks, width='stretch')
     
     if not df_attacks.empty:
         fig_pie = px.pie(df_attacks, names='attack_type', title="Phan loai cac kieu tan cong")
-        st.plotly_chart(fig_pie)
+        st.plotly_chart(fig_pie, width='stretch', key="attack_pie_chart")
 
 # --- TAB 3: QUAN LY THIET BI (CRUD) ---
 with tabs[2]:
@@ -80,7 +80,7 @@ with tabs[2]:
         new_node_key = st.text_input("Node Key (16 bytes)")
         new_gw_key = st.text_input("Gateway Key")
         new_desc = st.text_area("Mo ta")
-        if st.button("Luu thiet bi"):
+        if st.button("Luu thiet bi", key="btn_save_device"):
             conn = get_db_connection()
             conn.execute("INSERT INTO devices (device_id, node_key, gateway_key, description) VALUES (?,?,?,?)",
                          (new_id, new_node_key, new_gw_key, new_desc))
@@ -90,9 +90,9 @@ with tabs[2]:
             st.rerun()
 
     with st.expander("Mo khoa / Chan thiet bi"):
-        target_id = st.selectbox("Chon thiet bi", df_devs['device_id'])
-        action = st.radio("Hanh dong", ["active", "blocked"])
-        if st.button("Cap nhat trang thai"):
+        target_id = st.selectbox("Chon thiet bi", df_devs['device_id'], key="select_device_status")
+        action = st.radio("Hanh dong", ["active", "blocked"], key="radio_action")
+        if st.button("Cap nhat trang thai", key="btn_update_status"):
             conn = get_db_connection()
             conn.execute("UPDATE devices SET status = ? WHERE device_id = ?", (action, target_id))
             conn.commit()
@@ -111,6 +111,7 @@ with tabs[3]:
         data=csv,
         file_name=f"telemetry_report_{datetime.now().strftime('%Y%m%d')}.csv",
         mime='text/csv',
+        key="btn_download_csv"
     )
     
     st.write("### Tom tat hoat dong")

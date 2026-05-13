@@ -1,10 +1,26 @@
 import requests
 import time
+import sqlite3
+import os
 from simulator import simulate_node_to_server
+from dotenv import load_dotenv
 
 SERVER_URL = "http://127.0.0.1:5000/receive-data"
+DB_NAME = 'iot_security.db'
+
+def reset_db_state():
+    """Dọn dẹp trạng thái thiết bị để bắt đầu bài test mới"""
+    if os.path.exists(DB_NAME):
+        conn = sqlite3.connect(DB_NAME)
+        # Mở khóa thiết bị, đặt lại số thứ tự và xóa nhật ký tấn công cũ
+        conn.execute("UPDATE devices SET status = 'active', last_seq = -1 WHERE device_id = 'ESP32_NODE_X'")
+        conn.execute("DELETE FROM attack_logs")
+        conn.commit()
+        conn.close()
+        print("[*] Đã đặt lại trạng thái Database sạch để kiểm thử.\n")
 
 def run_comprehensive_test():
+    reset_db_state()
     print("=== BẮT ĐẦU KIỂM THỬ KIẾN TRÚC: NODE -> GATEWAY -> SERVER ===\n")
 
     # 1. Test Gửi dữ liệu Hợp lệ

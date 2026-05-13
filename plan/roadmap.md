@@ -33,7 +33,7 @@ Tài liệu này dùng để theo dõi tiến độ thực hiện đồ án. Cá
 - [x] Xây dựng giao diện quản lý để thao tác danh sách thiết bị và khóa mật mã (CRUD).
 - [x] Tích hợp tính năng xuất báo cáo dữ liệu dưới dạng CSV phục vụ phân tích.
 - [ ] Triển khai hệ thống cảnh báo qua Email/Telegram khi phát hiện tấn công nghiêm trọng (Chưa cấu hình API Key).
-
+ 
 ### Tuần 8: Kiểm định an ninh và Ổn định hệ thống
 - [ ] Kiểm tra khả năng chịu tải của Server Flask khi nhận dữ liệu liên tục.
 - [ ] Tối ưu hóa truy vấn cơ sở dữ liệu để đảm bảo tốc độ xử lý.
