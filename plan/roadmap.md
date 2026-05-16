@@ -11,7 +11,7 @@ Tài liệu này dùng để theo dõi tiến độ thực hiện đồ án. Cá
 - [x] Thiết kế cấu trúc gói tin nhị phân tối ưu băng thông.
 - [x] Triển khai module mã hóa và giải mã cốt lõi bằng Python.
 - [x] Xây dựng Flask Server hỗ trợ nhận dữ liệu JSON và chuỗi Hex.
-- [x] Triển khai giải pháp bảo mật Node-to-Node và Gateway-to-Server (HMAC).
+<!-- - [x] Triển khai giải pháp bảo mật Node-to-Node và Gateway-to-Server (HMAC).  -->
 - [x] Xây dựng Dashboard giám sát cơ bản.
 
 ---
@@ -22,17 +22,17 @@ Tài liệu này dùng để theo dõi tiến độ thực hiện đồ án. Cá
 - [x] Chuyển đổi lưu trữ từ file JSON sang SQLite Database.
 - [x] Triển khai bảng quản lý thiết bị để cấp khóa riêng cho từng Node IoT.
 - [x] Nâng cấp Dashboard với biểu đồ dữ liệu thời gian thực (Line Chart, Pie Chart).
-- [x] Xây dựng module đo đạc độ trễ (Latency) từ đầu cuối đến đầu cuối.
+- [x] Xây dựng module đo đạc độ trễ (Latency) từ đầu cuối đến đầu cuối. (Thêm)
 
 ### Tuần 6: Phân tích an ninh và Giám sát nâng cao
 - [x] Triển khai bảng nhật ký chi tiết các nỗ lực tấn công (loại tấn công, thời điểm).
-- [x] Bổ sung tính năng Danh sách đen (Blacklist): Tự động chặn thiết bị nếu vi phạm quy tắc an ninh quá 3 lần.
-- [x] Hiển thị trạng thái kết nối và sức khỏe của từng Node trên Dashboard.
+- [x] Bổ sung tính năng: Tự động chặn thiết bị nếu vi phạm quy tắc an ninh quá số lần quy định.
+- [x] Hiển thị trạng thái kết nối và health của từng Node trên Dashboard.
 
 ### Tuần 7: Quản trị hệ thống qua giao diện Web
 - [x] Xây dựng giao diện quản lý để thao tác danh sách thiết bị và khóa mật mã (CRUD).
-- [x] Tích hợp tính năng xuất báo cáo dữ liệu dưới dạng CSV phục vụ phân tích.
-- [ ] Triển khai hệ thống cảnh báo qua Email/Telegram khi phát hiện tấn công nghiêm trọng (Chưa cấu hình API Key).
+- [x] Tích hợp tính năng xuất báo cáo dữ liệu dưới dạng CSV phục vụ phân tích. (Thêm)
+- [ ] Triển khai hệ thống cảnh báo qua Email/Telegram khi phát hiện tấn công nghiêm trọng (Chưa cấu hình API Key).(Thêm)
  
 ### Tuần 8: Kiểm định an ninh và Ổn định hệ thống
 - [ ] Kiểm tra khả năng chịu tải của Server Flask khi nhận dữ liệu liên tục.
@@ -41,7 +41,7 @@ Tài liệu này dùng để theo dõi tiến độ thực hiện đồ án. Cá
 
 ---
 
-## GIAI ĐOẠN 3: MẬT MÃ HỌC NÂNG CAO (Tuần 9 - 12)
+## GIAI ĐOẠN 3: MẬT MÃ HỌC NÂNG CAO (Tuần 9 - 12) (Nâng cao- Tham khảo)
 
 ### Tuần 9 - 10: Giao thức trao đổi khóa động (ECDH)
 - [ ] Nghiên cứu và triển khai thuật toán Elliptic Curve Diffie-Hellman (X25519).
@@ -67,7 +67,7 @@ Tài liệu này dùng để theo dõi tiến độ thực hiện đồ án. Cá
 - [ ] So sánh thực nghiệm hiệu năng với các giải pháp bảo mật tiêu chuẩn khác.
 - [ ] Tổng hợp biểu đồ so sánh dữ liệu để đưa vào báo cáo cuối cùng.
 
-### Tuần 16: Hoàn thiện báo cáo và Bảo vệ đồ án
+### Tuần 15- 16: Hoàn thiện báo cáo và Bảo vệ đồ án
 - [ ] Hoàn thiện nội dung cuốn báo cáo tốt nghiệp.
 - [ ] Chuẩn bị slide thuyết trình và video minh họa hệ thống.
 - [ ] Kiểm tra cuối cùng toàn bộ hệ thống trước khi hội đồng đánh giá.

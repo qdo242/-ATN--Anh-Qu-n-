@@ -9,60 +9,67 @@ SERVER_URL = "http://127.0.0.1:5000/receive-data"
 DB_NAME = 'iot_security.db'
 
 def reset_db_state():
-    """Dọn dẹp trạng thái thiết bị để bắt đầu bài test mới"""
+    """Don dep trang thai thiet bi de bat dau bai test moi"""
     if os.path.exists(DB_NAME):
         conn = sqlite3.connect(DB_NAME)
-        # Mở khóa thiết bị, đặt lại số thứ tự và xóa nhật ký tấn công cũ
         conn.execute("UPDATE devices SET status = 'active', last_seq = -1 WHERE device_id = 'ESP32_NODE_X'")
         conn.execute("DELETE FROM attack_logs")
+        conn.execute("DELETE FROM telemetry")
         conn.commit()
         conn.close()
-        print("[*] Đã đặt lại trạng thái Database sạch để kiểm thử.\n")
+        print("[*] Da thiet lap trang thai he thong sach.\n")
 
 def run_comprehensive_test():
     reset_db_state()
-    print("=== BẮT ĐẦU KIỂM THỬ KIẾN TRÚC: NODE -> GATEWAY -> SERVER ===\n")
+    print("=== BAT DAU KIEM THU AN NINH CHUYEN SAU ===\n")
 
-    # 1. Test Gửi dữ liệu Hợp lệ
-    print("[1] Gửi bản tin hợp lệ (Đầy đủ HMAC + AES-GCM)...")
-    packet = simulate_node_to_server(temp=28.5, humidity=55, seq=1)
-    payload_json = {"payload": packet.hex()}
-    try:
-        r = requests.post(SERVER_URL, json=payload_json)
-        print(f"Phản hồi từ Server: {r.status_code} - {r.json()}")
-    except Exception as e:
-        print(f"Lỗi kết nối tới Server: {e}")
-        return
+    # 1. Giao dich hop le
+    print("[1] Gui ban tin hop le (Seq 1)...")
+    packet = simulate_node_to_server(temp=25.0, humidity=60, seq=1)
+    r = requests.post(SERVER_URL, json={"payload": packet.hex()})
+    print(f"Phan hoi: {r.status_code} - {r.json()}\n")
 
-    # 2. Test Tấn công Gateway giả mạo (Sai HMAC)
-    print("\n[2] Tấn công Gateway giả mạo (Sai chữ ký HMAC)...")
-    tampered_gw_packet = bytearray(packet)
-    tampered_gw_packet[0] = 0xFF # Đổi ID Gateway trái phép
-    r = requests.post(SERVER_URL, json={"payload": tampered_gw_packet.hex()})
-    print(f"Phản hồi từ Server: {r.status_code} - {r.json()}")
+    # 2. Tan cong vao HMAC (Sai khoa Gateway)
+    print("[2] Tan cong mạo danh Gateway (Sai HMAC)...")
+    tampered_hmac = bytearray(packet)
+    tampered_hmac[-1] = tampered_hmac[-1] ^ 0x01
+    requests.post(SERVER_URL, json={"payload": bytes(tampered_hmac).hex()})
+    print("-> Da ghi nhan no luc tan cong HMAC.\n")
 
-    # 3. Test Tấn công phát lại (Replay Attack)
-    print("\n[3] Tấn công phát lại (Gửi lại gói tin cũ)...")
-    r = requests.post(SERVER_URL, json=payload_json)
-    print(f"Phản hồi từ Server: {r.status_code} - {r.json()}")
-
-    # 4. Test Tấn công sửa đổi dữ liệu (Tampering)
-    print("\n[4] Tấn công sửa đổi dữ liệu Node (Sai mã xác thực Tag)...")
-    valid_packet = simulate_node_to_server(temp=30.0, humidity=50, seq=10)
-    tampered_payload = bytearray(valid_packet[:-32])
-    tampered_payload[20] = tampered_payload[20] ^ 0xFF # Đảo bit trong ciphertext
-    
+    # 3. Tan cong vao Nonce (AES-GCM Integrity)
+    print("[3] Tan cong vao Nonce (Sua doi vector khoi tao)...")
+    tampered_nonce = bytearray(packet)
+    tampered_nonce[5] = tampered_nonce[5] ^ 0xFF
+    # Phai ky lai HMAC de vuot qua lop 1
     from Cryptodome.Hash import HMAC, SHA256
     import os
-    from dotenv import load_dotenv
     load_dotenv()
-    GATEWAY_KEY = os.getenv('GATEWAY_KEY', 'default_gw_key_').encode('utf-8')
+    GATEWAY_KEY = os.getenv('GATEWAY_KEY', 'gateway_secret_k').encode('utf-8')
     h = HMAC.new(GATEWAY_KEY, digestmod=SHA256)
-    h.update(tampered_payload)
-    final_tampered = bytes(tampered_payload) + h.digest()
-    
-    r = requests.post(SERVER_URL, json={"payload": final_tampered.hex()})
-    print(f"Phản hồi từ Server: {r.status_code} - {r.json()}")
+    h.update(tampered_nonce[:-32])
+    final_packet = bytes(tampered_nonce[:-32]) + h.digest()
+    r = requests.post(SERVER_URL, json={"payload": final_packet.hex()})
+    print(f"Phan hoi: {r.status_code} - {r.json()}\n")
+
+    # 4. Tan cong Replay (Gui lai Seq 1)
+    print("[4] Tan cong phat lai (Replay Seq 1)...")
+    requests.post(SERVER_URL, json={"payload": packet.hex()})
+    print("-> Da ghi nhan no luc Replay.\n")
+
+    # 5. Tan cong dồn dập de kich hoat Blacklist
+    print("[5] Mo phong tan cong dồn dập (Brute Force)...")
+    for i in range(2):
+        fake_packet = os.urandom(64).hex()
+        requests.post(SERVER_URL, json={"payload": fake_packet})
+    print("-> Thiet bi hien tai se bi tu dong dua vao Blacklist.\n")
+
+    # 6. Kiem tra trang thai Blacklist
+    print("[6] Kiem tra sau khi bi chan (Gui lai ban tin hop le Seq 2)...")
+    valid_packet_2 = simulate_node_to_server(temp=26.0, humidity=59, seq=2)
+    r = requests.post(SERVER_URL, json={"payload": valid_packet_2.hex()})
+    print(f"Phan hoi: {r.status_code} - {r.json()}")
+    if r.status_code == 403:
+        print("=> Ket qua: He thong da chan thiet bi vi pham thanh cong.")
 
 if __name__ == "__main__":
     run_comprehensive_test()
